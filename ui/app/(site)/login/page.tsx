@@ -55,7 +55,7 @@ export default function Login() {
               className="absolute w-full top-[-50] z-10 flex justify-center"
             >
               <div className="bg-red-50 border border-red-200 flex items-center gap-2 px-3 py-1 rounded-md shadow-md">
-                <CircleX color="#fb2c36" size={18}/>
+                <CircleX color="#fb2c36" size={18} />
                 <p className="text-red-500 font-medium text-sm">
                   {errorMessage}
                 </p>

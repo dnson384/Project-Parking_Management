@@ -1,13 +1,13 @@
 import {
-  LoginPayloadEntity,
   AuthResponse,
+  RegisterPayloadEntity,
 } from "@/domain/entities/auth.entity";
 import { IAuthRepository } from "@/domain/repositories/auth.repository";
 
-export class LoginUsecase {
+export class RegisterUsecase {
   constructor(private readonly repo: IAuthRepository) {}
 
-  async execute(payload: LoginPayloadEntity): Promise<AuthResponse> {
-    return await this.repo.login(payload);
+  async execute(payload: RegisterPayloadEntity): Promise<AuthResponse> {
+    return await this.repo.register(payload);
   }
 }

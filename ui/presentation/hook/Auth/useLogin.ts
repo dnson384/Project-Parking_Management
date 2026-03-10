@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { LoginService } from "../../services/auth.service";
 import { LoginPayload } from "../../schemas/auth.schema";
 import { isAxiosError } from "axios";
+import { useRouter } from "next/navigation";
 
 interface FieldData {
   email: string;
@@ -10,6 +11,8 @@ interface FieldData {
 }
 
 export default function useLogin() {
+  const router = useRouter();
+
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -40,6 +43,9 @@ export default function useLogin() {
 
     try {
       const response = await LoginService(payload);
+      if (response) {
+        router.replace("/dashboard");
+      }
     } catch (err) {
       if (isAxiosError(err)) {
         setErrorMessage(err.response?.data.message);

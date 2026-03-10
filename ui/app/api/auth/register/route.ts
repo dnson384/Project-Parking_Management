@@ -1,7 +1,9 @@
-import { LoginUsecase } from "@/application/Auth/login.usecase";
-import { LoginPayloadEntity } from "@/domain/entities/auth.entity";
+import { RegisterUsecase } from "@/application/Auth/register.usecase";
+import {
+  RegisterPayloadEntity,
+} from "@/domain/entities/auth.entity";
 import { AuthRepositoryImpl } from "@/infrastructure/repositories/auth.repository.impl";
-import { LoginPayload } from "@/presentation/schemas/auth.schema";
+import { RegisterPayload } from "@/presentation/schemas/auth.schema";
 import { isAxiosError } from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -9,7 +11,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    const validated = LoginPayload.safeParse(body);
+    const validated = RegisterPayload.safeParse(body);
     if (!validated.success) {
       return NextResponse.json(
         {
@@ -20,14 +22,16 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { email, plainPassword } = validated.data;
-    const domainPayload: LoginPayloadEntity = {
+    const { fullname, email, phone, plainPassword } = validated.data;
+    const domainPayload: RegisterPayloadEntity = {
+      fullname: fullname,
       email: email,
+      phone: phone,
       plainPassword: plainPassword,
     };
 
     const repo = new AuthRepositoryImpl();
-    const usecase = new LoginUsecase(repo);
+    const usecase = new RegisterUsecase(repo);
     const response = await usecase.execute(domainPayload);
 
     const nextResponse = NextResponse.json({ success: true });
@@ -35,13 +39,13 @@ export async function POST(req: NextRequest) {
       httpOnly: true,
       sameSite: "strict",
       path: "/",
-      maxAge: 60 * 15,
+      maxAge: 1000 * 60 * 15,
     });
     nextResponse.cookies.set("refreshToken", response.refreshToken, {
       httpOnly: true,
       sameSite: "strict",
       path: "/",
-      maxAge: 60 * 60 * 24 * 7,
+      maxAge: 1000 * 60 * 60 * 24 * 7,
     });
 
     return nextResponse;
