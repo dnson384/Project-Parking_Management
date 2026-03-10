@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Button } from "./presentation/components/common/button";
+import { Button } from "../presentation/components/common/button";
 import {
   ParkingCircle,
   Clock,
@@ -9,7 +9,7 @@ import {
   MapPin,
   CreditCard,
 } from "lucide-react";
-import { btnVariants } from "./presentation/components/share/btnVariants";
+import { btnVariants } from "../presentation/components/share/btnVariants";
 
 export default function Home() {
   return (
