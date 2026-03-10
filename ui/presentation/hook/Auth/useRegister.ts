@@ -1,5 +1,8 @@
-"use client"
-import React, { useState } from "react";
+"use client";
+import { RegisterPayload } from "@/presentation/schemas/auth.schema";
+import { RegisterService } from "@/presentation/services/auth.service";
+import { isAxiosError } from "axios";
+import React, { useEffect, useState } from "react";
 
 interface FieldData {
   fullname: string;
@@ -31,7 +34,7 @@ export default function useRegister() {
     }));
   };
 
-  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (fieldData.plainPassword !== fieldData.confirmPassword) {
@@ -42,8 +45,31 @@ export default function useRegister() {
       return setErrorMessage("Vui lòng đồng ý với các điều khoản và điều kiện");
     }
 
-    console.log("Registration attempt:", fieldData);
+    const payload: RegisterPayload = {
+      fullname: fieldData.fullname,
+      email: fieldData.email,
+      phone: fieldData.phone,
+      plainPassword: fieldData.plainPassword,
+    };
+
+    try {
+      const response = await RegisterService(payload);
+    } catch (err) {
+      if (isAxiosError(err)) {
+        setErrorMessage(err.response?.data.message);
+      }
+    }
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (errorMessage !== null) {
+        setErrorMessage(null);
+      }
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [errorMessage]);
 
   return {
     // Show password

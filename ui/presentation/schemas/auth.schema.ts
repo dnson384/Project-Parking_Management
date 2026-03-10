@@ -6,8 +6,11 @@ export const LoginPayload = z.object({
 });
 
 export const RegisterPayload = z.object({
-  email: z.email(),
+  fullname: z.string(),
+  email: z.string(),
+  phone: z.string(),
   plainPassword: z.string(),
 });
 
 export type LoginPayload = z.infer<typeof LoginPayload>;
+export type RegisterPayload = z.infer<typeof RegisterPayload>;

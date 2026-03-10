@@ -1,7 +1,9 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { ParkingCircle, Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, CircleX } from "lucide-react";
+import { motion } from "framer-motion";
+
 import useRegister from "@/presentation/hook/Auth/useRegister";
 import { btnVariants } from "@/presentation/components/share/btnVariants";
 import { Button } from "@/presentation/components/common/button";
@@ -25,7 +27,7 @@ export default function Register() {
     <>
       <NavBar />
 
-      <div className="max-w-7xl px-4 py-12 grid md:grid-cols-2 gap-12 items-center mx-auto">
+      <div className="max-w-7xl px-4 py-20 grid md:grid-cols-2 gap-12 items-center mx-auto">
         {/* Right side - Image */}
         <div>
           <div className="relative rounded-xl overflow-hidden shadow-2xl aspect-video hidden md:block md:order-1">
@@ -66,144 +68,161 @@ export default function Register() {
         </div>
 
         {/* Left side - Registration Form */}
-        <div className="w-full max-w-lg mx-auto border border-gray-300 px-8 py-10 rounded-xl md:order-2">
-          <div className="mb-5">
-            <h1 className="text-2xl font-bold mb-1">Đăng ký tài khoản</h1>
-            <p>Bắt đầu sử dụng ParkEase chỉ với vài bước đơn giản</p>
-          </div>
-
-          <section>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-              <div className="flex flex-col gap-1.5">
-                <label htmlFor="fullname" className="font-medium">
-                  Họ và Tên
-                </label>
-                <input
-                  id="fullname"
-                  type="text"
-                  placeholder="Nguyễn Văn A"
-                  className="py-1.5 px-3 bg-gray-100 rounded-lg focus:bg-gray-200 focus:outline-1 focus:outline-gray-500"
-                  value={fieldData.fullname}
-                  onChange={(e) => handleFieldChange(e)}
-                  required
-                />
+        <div className="relative">
+          {errorMessage && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="absolute w-full top-[-50] z-10 flex justify-center"
+            >
+              <div className="bg-red-50 border border-red-200 flex items-center gap-2 px-3 py-1 rounded-md shadow-md">
+                <CircleX color="#fb2c36" size={18} />
+                <p className="text-red-500 font-medium text-sm">
+                  {errorMessage}
+                </p>
               </div>
+            </motion.div>
+          )}
 
-              <div className="flex flex-col gap-1.5">
-                <label htmlFor="email" className="font-medium">
-                  Email
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  placeholder="name@example.com"
-                  className="py-1.5 px-3 bg-gray-100 rounded-lg focus:bg-gray-200 focus:outline-1 focus:outline-gray-500"
-                  value={fieldData.email}
-                  onChange={(e) => handleFieldChange(e)}
-                  required
-                />
-              </div>
+          <div className="w-full max-w-lg mx-auto border border-gray-300 px-8 py-10 rounded-xl md:order-2">
+            <div className="mb-5">
+              <h1 className="text-2xl font-bold mb-1">Đăng ký tài khoản</h1>
+              <p>Bắt đầu sử dụng ParkEase chỉ với vài bước đơn giản</p>
+            </div>
 
-              <div className="flex flex-col gap-1.5">
-                <label htmlFor="phone" className="font-medium">
-                  Số điện thoại
-                </label>
-                <input
-                  id="phone"
-                  type="tel"
-                  placeholder="0123456789"
-                  className="py-1.5 px-3 bg-gray-100 rounded-lg focus:bg-gray-200 focus:outline-1 focus:outline-gray-500"
-                  value={fieldData.phone}
-                  onChange={(e) => handleFieldChange(e)}
-                  required
-                />
-              </div>
-
-              <div>
-                <label htmlFor="plainPassword" className="font-medium">
-                  Mật khẩu
-                </label>
-                <div className="relative">
+            <section>
+              <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="fullname" className="font-medium">
+                    Họ và Tên
+                  </label>
                   <input
-                    id="plainPassword"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="••••••••"
-                    className="w-full py-1.5 px-3 bg-gray-100 rounded-lg focus:bg-gray-200 focus:outline-1 focus:outline-gray-400"
-                    value={fieldData.plainPassword}
+                    id="fullname"
+                    type="text"
+                    placeholder="Nguyễn Văn A"
+                    className="py-1.5 px-3 bg-gray-100 rounded-lg focus:bg-gray-200 focus:outline-1 focus:outline-gray-500"
+                    value={fieldData.fullname}
                     onChange={(e) => handleFieldChange(e)}
                     required
                   />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="email" className="font-medium">
+                    Email
+                  </label>
+                  <input
+                    id="email"
+                    type="email"
+                    placeholder="name@example.com"
+                    className="py-1.5 px-3 bg-gray-100 rounded-lg focus:bg-gray-200 focus:outline-1 focus:outline-gray-500"
+                    value={fieldData.email}
+                    onChange={(e) => handleFieldChange(e)}
+                    required
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="phone" className="font-medium">
+                    Số điện thoại
+                  </label>
+                  <input
+                    id="phone"
+                    type="tel"
+                    placeholder="0123456789"
+                    className="py-1.5 px-3 bg-gray-100 rounded-lg focus:bg-gray-200 focus:outline-1 focus:outline-gray-500"
+                    value={fieldData.phone}
+                    onChange={(e) => handleFieldChange(e)}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="plainPassword" className="font-medium">
+                    Mật khẩu
+                  </label>
+                  <div className="relative">
+                    <input
+                      id="plainPassword"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="••••••••"
+                      className="w-full py-1.5 px-3 bg-gray-100 rounded-lg focus:bg-gray-200 focus:outline-1 focus:outline-gray-400"
+                      value={fieldData.plainPassword}
+                      onChange={(e) => handleFieldChange(e)}
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="confirmPassword" className="font-medium">
+                    Xác nhận mật khẩu
+                  </label>
+                  <div className="relative">
+                    <input
+                      id="confirmPassword"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="••••••••"
+                      className="w-full py-1.5 px-3 bg-gray-100 rounded-lg focus:bg-gray-200 focus:outline-1 focus:outline-gray-400"
+                      value={fieldData.confirmPassword}
+                      onChange={(e) => handleFieldChange(e)}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-2">
+                  <input
+                    id="agreeToTerms"
+                    type="checkbox"
+                    className="accent-black"
+                    checked={fieldData.agreeToTerms}
+                    onChange={(e) => handleFieldChange(e)}
+                  />
+                  <label
+                    htmlFor="agreeToTerms"
+                    className="text-sm text-muted-foreground leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                  </button>
+                    Tôi đồng ý với{" "}
+                    <Link href="#" className="text-primary hover:underline">
+                      Điều khoản dịch vụ
+                    </Link>{" "}
+                    và{" "}
+                    <Link href="#" className="text-primary hover:underline">
+                      Chính sách bảo mật
+                    </Link>
+                  </label>
                 </div>
-              </div>
 
-              <div>
-                <label htmlFor="confirmPassword" className="font-medium">
-                  Xác nhận mật khẩu
-                </label>
-                <div className="relative">
-                  <input
-                    id="confirmPassword"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="••••••••"
-                    className="w-full py-1.5 px-3 bg-gray-100 rounded-lg focus:bg-gray-200 focus:outline-1 focus:outline-gray-400"
-                    value={fieldData.confirmPassword}
-                    onChange={(e) => handleFieldChange(e)}
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-2">
-                <input
-                  id="agreeToTerms"
-                  type="checkbox"
-                  className="accent-black"
-                  checked={fieldData.agreeToTerms}
-                  onChange={(e) => handleFieldChange(e)}
+                <Button
+                  type="submit"
+                  classname={"font-bold mt-3"}
+                  variant={btnVariants.variant.dark}
+                  size={btnVariants.size.lg}
+                  content="Đăng ký tài khoản"
                 />
-                <label
-                  htmlFor="agreeToTerms"
-                  className="text-sm text-muted-foreground leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Tôi đồng ý với{" "}
-                  <Link href="#" className="text-primary hover:underline">
-                    Điều khoản dịch vụ
-                  </Link>{" "}
-                  và{" "}
-                  <Link href="#" className="text-primary hover:underline">
-                    Chính sách bảo mật
-                  </Link>
-                </label>
-              </div>
+              </form>
+            </section>
 
-              <Button
-                type="submit"
-                classname={"font-bold mt-3"}
-                variant={btnVariants.variant.dark}
-                size={btnVariants.size.lg}
-                content="Đăng ký tài khoản"
-              />
-            </form>
-          </section>
-
-          <div className="mt-4 flex justify-center">
-            <p className="text-sm">
-              Bạn đã có tài khoản?{" "}
-              <Link href="/login" className="font-medium hover:underline">
-                Đăng nhập
-              </Link>
-            </p>
+            <div className="mt-4 flex justify-center">
+              <p className="text-sm">
+                Bạn đã có tài khoản?{" "}
+                <Link href="/login" className="font-medium hover:underline">
+                  Đăng nhập
+                </Link>
+              </p>
+            </div>
           </div>
         </div>
       </div>
